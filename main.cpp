@@ -5,9 +5,29 @@
 #include <string.h>
 using namespace std;
 
+void limpiar_pantalla()
+{
+  #ifdef _WIN32
+    system("cls");
+  #else
+    system("clear");
+  #endif
+}
+
+void menu(){
+    cout<<"MENU PRINCIPAL"<<endl<<endl;
+    cout<<"1 - Crea Archivo"<<endl;
+    cout<<"2 - Inserta Linea"<<endl;
+    cout<<"3 - Mostrar Texto"<<endl;
+    cout<<"4 - Borra Linea"<<endl;
+    cout<<"5 - Borra Archivo"<<endl<<endl;
+    cout<<"0 - Salir"<<endl<<endl;
+    cout<<"Inserte Opcion: ";
+}
+
 tipoRet mostrarTexto(Archivo a, char ver){
     tipoRet ret;
-    Linea l =ObtenerLi(a); //Obtiene la primer linea del archivo
+    Linea l =ObtenerPrimLi(a); //Obtiene la primer linea del archivo
     int contaLi=0;
 
     if(!isEmptyArch(a)){
@@ -16,8 +36,9 @@ tipoRet mostrarTexto(Archivo a, char ver){
             headLi(l);
             contaLi++;
             cout<<contaLi<<"\t"<<headLi(l)<<endl;
-            l=tailLi(l);
+            l=tailLiSig(l);
         }
+        cout<<"\n\n";
         ret= OK;
     }
     else{
@@ -30,42 +51,66 @@ tipoRet mostrarTexto(Archivo a, char ver){
 
 int main(){
     Archivo a;
-    tipoRet ins, imp, del;
+    tipoRet ins, imp, delli, delarch;
     char nom[20], line[50];
-    
+    int opc;
+    int nroli; 
     string arch="curriculum.txt";
-    string lin="Pais: Uruguay";
-    string lin1="Ciudad: Montevideo";
-    string lin2="Barrio: Piedras Blancas";
-    string lin3="Insertado";
+    string lin;
 
-    
+    menu();    
+    cin>>opc;
+    system("clear");
+    while(opc!=0){
+        
+        if(opc == 1){
+            strcpy(nom,arch.c_str());
+            a= crearArchivo(nom);
+            
+        }
+        if( opc == 2){
+            cout<<"INSERTAR LINEA"<<endl<<endl;
+            cout<<"Nro de Linea: ";
+            
+            cin>>nroli;
+            cout<<"Ingrese Linea: ";
+            cin>>lin;
+            cout<<"\n\n";
+            strcpy(line,lin.c_str());
+            ins=insertarLinea(a, '1', line, nroli, 'k');
+            if(ins==OK){
+                cout<<"Linea insertada"<<endl<<endl;
+            }
+            else {
+                if(ins==ERROR){
+                    cout<<"No se puede insertar linea"<<endl<<endl;
+                }
+            }
+        }
+        if(opc == 3){
+            mostrarTexto(a, '1');
+        }
+        if(opc == 4){
+            cout<<"BORRAR LINEA\n\n";
+            cout<<"Nro de Linea: ";
+            cin>>nroli;
+            cout<<"\n\n";
+            delli= borrarLinea(a, '1', nroli, 'k');
+        }
 
-    strcpy(nom,arch.c_str());
-    a= crearArchivo(nom);
-
-    strcpy(line,lin.c_str());
-    ins= insertarLinea(a, '1', line, 1, 'k');
-
-    strcpy(line,lin1.c_str());
-    ins= insertarLinea(a, '1', line, 2, 'k');
-
-    strcpy(line,lin2.c_str());
-    ins= insertarLinea(a, '1', line, 3, 'k');
-
-
-    strcpy(line,lin3.c_str());
-    ins= insertarLinea(a, '1', line, 4, 'k');
-
-/*     if(ins==OK)
-    {
-        cout<<"Se inserto correctamente\n";
+        if(opc == 5){
+            delarch= borrarArchivo(a);
+        }
+        menu();    
+        cin>>opc;
+        system("clear");    
     }
-    
-    else{
-        cout<<"El archivo no existe";
-    }  */
-    //del= borrarLinea(a, '1', 3, 'k');
-    imp= mostrarTexto(a, '1');
+
+
+
+
+
+
+
     return 0;
 }

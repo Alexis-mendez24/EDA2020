@@ -16,8 +16,8 @@ bool isEmptyLi(Linea l);
 bool isEmptyArch(Archivo a);
 char* headLi(Linea l);
 char* headArch(Archivo a);
-Linea tailLi(Linea l);
-Linea ObtenerLi(Archivo a);
+Linea tailLiSig(Linea l);
+Linea ObtenerPrimLi(Archivo a);
 int contarLineas(Archivo a);
 
 //Constructoras
