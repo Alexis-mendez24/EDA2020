@@ -27,7 +27,7 @@ void menu(){
 
 tipoRet mostrarTexto(Archivo a, char ver){
     tipoRet ret;
-    Linea l =ObtenerPrimLi(a); //Obtiene la primer linea del archivo
+    Linea l = ObtenerPrimLi(a); //Obtiene la primer linea del archivo
     int contaLi=0;
 
     if(!isEmptyArch(a)){
@@ -105,12 +105,5 @@ int main(){
         cin>>opc;
         system("clear");    
     }
-
-
-
-
-
-
-
     return 0;
 }

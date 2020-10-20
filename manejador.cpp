@@ -204,19 +204,13 @@ void insertarAlMedio(Archivo &a, char ver, char line[50], unsigned int nroLinea,
     tipoRet insertarLinea(Archivo & a, char ver, char line[50], unsigned int nroLinea, char error)
     {
         tipoRet ret;
-        if(isEmptyArch(a)){
-            insertarAlInicio(a, ver, line, nroLinea, error);
-            ret = OK;
-        }
-        else{ 
-            if(!isEmptyArch(a)){
-                insertarAlMedio(a, ver, line, nroLinea, error);
-                ret = OK;
+            if (!isEmptyArch(a)){
+                insertarAlInicio(a, ver, line, nroLinea, error);
             }
             else{
-                ret =ERROR;
+                insertarAlMedio(a, ver, line, nroLinea, error);
             }
-        }
+            
         return ret;
     }
     //Pre: Recibe un archivo no Vacio
@@ -254,7 +248,7 @@ void insertarAlMedio(Archivo &a, char ver, char line[50], unsigned int nroLinea,
         delete l;
     }
 
-    //Pre:Recibe Numero de linea y un archivo
+    //Pre:Recibe Numero de linea y un archivo1
     //Post:Devuelve Lineas con el elemento eliminado
     tipoRet borrarLinea(Archivo & a, char ver, int nroLinea, char error)
     {
