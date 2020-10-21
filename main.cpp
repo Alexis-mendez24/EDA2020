@@ -31,14 +31,13 @@ tipoRet mostrarTexto(Archivo a, char ver){
     int contaLi=0;
 
     if(!isEmptyArch(a)){
-        cout<<headArch(a)<<" - "<<ver<<endl<<endl;
+        cout<<headArch(a)<<endl<<endl;
         while(!isEmptyLi(l)){
             headLi(l);
             contaLi++;
-            cout<<contaLi<<"\t"<<headLi(l)<<endl;
+            cout<<contaLi<<"\t"<<headLi(l)<<endl<<endl;
             l=tailLiSig(l);
         }
-        cout<<"\n\n";
         ret= OK;
     }
     else{
@@ -53,6 +52,7 @@ int main(){
     Archivo a;
     tipoRet ins, imp, delli, delarch;
     char nom[20], line[50];
+    char * error;
     int opc;
     int nroli; 
     string arch="curriculum.txt";
@@ -71,32 +71,32 @@ int main(){
         if( opc == 2){
             cout<<"INSERTAR LINEA"<<endl<<endl;
             cout<<"Nro de Linea: ";
-            
-            cin>>nroli;
+            cin>>nroli;            
             cout<<"Ingrese Linea: ";
-            cin>>lin;
-            cout<<"\n\n";
+            getline(cin, lin);
+            getline(cin, lin);
             strcpy(line,lin.c_str());
-            ins=insertarLinea(a, '1', line, nroli, 'k');
-            if(ins==OK){
-                cout<<"Linea insertada"<<endl<<endl;
-            }
-            else {
-                if(ins==ERROR){
-                    cout<<"No se puede insertar linea"<<endl<<endl;
-                }
-            }
+            ins=insertarLinea(a, '1', line, nroli, error);
+            
         }
         if(opc == 3){
             mostrarTexto(a, '1');
         }
         if(opc == 4){
-            cout<<"BORRAR LINEA\n\n";
-            cout<<"Nro de Linea: ";
-            cin>>nroli;
-            cout<<"\n\n";
+            if(!isEmptyArch(a)){
+                cout<<"BORRAR LINEA\n\n";
+                cout<<"Nro de Linea: ";
+                cin>>nroli;
+                cout<<"\n";
+                delli= borrarLinea(a, '1', nroli, error);        
+                cout<<error<<endl;
+                cout<<"\n";
+            }else{
+                cout<<"Archivo no contiene lineas"<<endl<<endl;
+            }
+  
+        
             
-            delli= borrarLinea(a, '1', nroli, 'k');
         }
 
         if(opc == 5){

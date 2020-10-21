@@ -122,7 +122,7 @@ int contarLineas(Archivo a)
 
 //Pre: Recibe un Archivo ya creado
 //Post: Inserta un elemento al inicio de una Linea
-void insertarAlInicio(Archivo &a, char ver, char line[50], unsigned int nroLinea, char error)
+void insertarAlInicio(Archivo &a, char ver, char line[50], unsigned int nroLinea)
 {
     Linea l = crearLineas(line);
     l->siguiente = a->primeraLinea;
@@ -132,10 +132,12 @@ void insertarAlInicio(Archivo &a, char ver, char line[50], unsigned int nroLinea
     {
         a->ultimaLinea = l;
     }
-    if (!isEmptyLi(a->ultimaLinea->siguiente))
+    if (!isEmptyLi(a->primeraLinea->siguiente))
     {
         a->primeraLinea->siguiente->anterior = a->primeraLinea;
     }
+
+
     /*     Linea l=crearLineas(line);
     if(a->primeraLinea==NULL){
         a->primeraLinea=l;
@@ -154,7 +156,7 @@ void insertarAlInicio(Archivo &a, char ver, char line[50], unsigned int nroLinea
 
 //Pre: Recibe un Archivo ya creado
 //Post: Inserta un elemento al final de una linea
-void insertarAlFinal(Archivo &a, char ver, char line[50], unsigned int nroLinea, char error)
+void insertarAlFinal(Archivo &a, char ver, char line[50], unsigned int nroLinea)
 {
 
     if (a->ultimaLinea != NULL)
@@ -166,7 +168,7 @@ void insertarAlFinal(Archivo &a, char ver, char line[50], unsigned int nroLinea,
     }
     else
     {
-        insertarAlInicio(a, ver, line, nroLinea, error);
+        insertarAlInicio(a, ver, line, nroLinea);
     }
 }
 
@@ -176,16 +178,16 @@ void insertarAlFinal(Archivo &a, char ver, char line[50], unsigned int nroLinea,
 
 //Pre: Recibe un Archivo ya creado
 //Post: Inserta un elemento al final de una linea
-void insertarAlMedio(Archivo &a, char ver, char line[50], unsigned int nroLinea, char error)
+void insertarAlMedio(Archivo &a, char ver, char line[50], unsigned int nroLinea)
 {
     int nromaxli = contarLineas(a);
     Linea l = crearLineas(line);
     if (nroLinea == 1) {
-        insertarAlInicio(a, ver, line, nroLinea, error);
+        insertarAlInicio(a, ver, line, nroLinea);
     }
     else{
         if (nromaxli < nroLinea){
-            insertarAlFinal(a, ver, line, nroLinea, error);
+            insertarAlFinal(a, ver, line, nroLinea);
         }else{
             if (nromaxli == nroLinea){
                 l->siguiente = a->ultimaLinea;
@@ -218,50 +220,55 @@ void insertarAlMedio(Archivo &a, char ver, char line[50], unsigned int nroLinea,
 
     //Pre: Recibe un Archivo creado
     //Post: Devuelve OK si inserta correcto
-    tipoRet insertarLinea(Archivo & a, char ver, char line[50], unsigned int nroLinea, char error)
+    tipoRet insertarLinea(Archivo & a, char ver, char line[50], unsigned int nroLinea, char *error)
     {
         tipoRet ret;
-        if (a != NULL)
-        {
-            if (a->primeraLinea == NULL)
-            {
-                insertarAlInicio(a, ver, line, nroLinea, error);
-            }
-            else
-            {
-                insertarAlMedio(a, ver, line, nroLinea, error);
-            }
+        string e;
+        if (isEmptyArch(a))
+        {   
+            insertarAlInicio(a, ver, line, nroLinea);
             ret = OK;
         }
         else
-        {
-            ret = ERROR;
+        {   
+            insertarAlMedio(a, ver, line, nroLinea);
+            ret = OK;
         }
-
+        
         return ret;
     }
     //Pre: Recibe un archivo no Vacio
     //Post:Elimina la primer linea
-    void borrarAlInicio(Archivo & a, char ver, int nroLinea, char error)
-    {
-        Linea l = a->primeraLinea->siguiente;
-        a->primeraLinea->siguiente->anterior = NULL;
-        delete a->primeraLinea;
-        a->primeraLinea = l;
+    void borrarAlInicio(Archivo & a, char ver, int nroLinea)
+    {   
+        
+        if(a->primeraLinea==a->ultimaLinea){
+            Linea aux = a->primeraLinea;
+            a->primeraLinea=NULL;
+            a->ultimaLinea=NULL;
+            delete aux;
+        }
+        else{
+            Linea aux = a->primeraLinea->siguiente;
+            a->primeraLinea->siguiente->anterior = NULL;
+            delete a->primeraLinea;
+            a->primeraLinea = aux;
+        }
     }
 
     //Pre: Recibe un archivo no Vacio
     //Post:Elimina la ultima
-    void borrarAlFinal(Archivo & a, char ver, int nroLinea, char error)
+    void borrarAlFinal(Archivo & a, char ver, int nroLinea)
     {
         Linea l = a->ultimaLinea->anterior;
         a->ultimaLinea->anterior->siguiente = NULL;
         delete a->ultimaLinea;
         a->ultimaLinea = l;
+        
     }
     //Pre: Recibe un archivo no Vacio
     //Post: Busca y elimina una linea definida por el usuario
-    void borrarAlMedio(Archivo & a, char ver, int nroLinea, char error)
+    void borrarAlMedio(Archivo & a, char ver, int nroLinea)
     {
         Linea l = a->primeraLinea;
         int cont = 1;
@@ -277,35 +284,39 @@ void insertarAlMedio(Archivo &a, char ver, char line[50], unsigned int nroLinea,
 
     //Pre:Recibe Numero de linea y un archivo
     //Post:Devuelve Lineas con el elemento eliminado
-    tipoRet borrarLinea(Archivo & a, char ver, int nroLinea, char error)
+    tipoRet borrarLinea(Archivo & a, char ver, int nroLinea, char *error)
     {
         tipoRet ret;
+        string e;
         int nromaxli = contarLineas(a);
-        if (a != NULL)
+        if (!isEmptyArch(a))
         {
             if (a->primeraLinea != NULL && a->ultimaLinea != NULL)
             {
                 if (nroLinea == 1)
                 {
-                    borrarAlInicio(a, ver, nroLinea, error);
-                }
-                if (nroLinea == nromaxli)
-                {
-                    borrarAlFinal(a, ver, nroLinea, error);
-                }
-                if (nroLinea < nromaxli)
-                {
-                    borrarAlMedio(a, ver, nroLinea, error);
+                    borrarAlInicio(a, ver, nroLinea);
+                }else{
+                    if (nroLinea == nromaxli)
+                    {
+                        borrarAlFinal(a, ver, nroLinea);
+                    }else{
+                        if (nroLinea < nromaxli)
+                        {
+                            borrarAlMedio(a, ver, nroLinea);
+                        }
+                    }
                 }
             }
             ret = OK;
-            return ret;
+            e="Linea Borrada";
+            strcpy(error,e.c_str());
         }
         else
         {
             ret = ERROR;
-            return ret;
         }
+        return ret;
     }
 
     void borrarArchivoAux(Archivo a)
