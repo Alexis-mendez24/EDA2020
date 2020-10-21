@@ -24,7 +24,7 @@ int contarLineas(Archivo a);
 Archivo crearArchivo(char nom[10]);
 tipoRet insertarLinea(Archivo &a, char ver, char line[50],unsigned int nroLinea, char *error);
 tipoRet mostrarTexto(Archivo a, char ver);
-tipoRet borrarLinea(Archivo &a, char ver, int nroLinea, char *error);
+tipoRet borrarLinea(Archivo &a, char ver, unsigned int  nroLinea, char *&error);
 tipoRet borrarArchivo(Archivo &a);
 
 #endif //MANEJADOR_H

@@ -15,14 +15,19 @@ void limpiar_pantalla()
 }
 
 void menu(){
-    cout<<"MENU PRINCIPAL"<<endl<<endl;
-    cout<<"1 - Crea Archivo"<<endl;
-    cout<<"2 - Inserta Linea"<<endl;
-    cout<<"3 - Mostrar Texto"<<endl;
-    cout<<"4 - Borra Linea"<<endl;
-    cout<<"5 - Borra Archivo"<<endl<<endl;
-    cout<<"0 - Salir"<<endl<<endl;
-    cout<<"Inserte Opcion: ";
+    cout<<" ___________________________ "<<endl;
+    cout<<"|                           |"<<endl;
+    cout<<"|       MENU PRINCIPAL      |"<<endl;
+    cout<<"|___________________________|"<<endl;
+    cout<<"|                           |"<<endl;
+    cout<<"|1 - Crea Archivo           |"<<endl;
+    cout<<"|2 - Inserta Linea          |"<<endl;
+    cout<<"|3 - Mostrar Texto          |"<<endl;
+    cout<<"|4 - Borra Linea            |"<<endl;
+    cout<<"|5 - Borra Archivo          |"<<endl;
+    cout<<"|0 - Salir                  |"<<endl;
+    cout<<"|___________________________|"<<endl<<endl;
+    cout<<"Inserte Opcion:";
 }
 
 tipoRet mostrarTexto(Archivo a, char ver){
@@ -35,9 +40,10 @@ tipoRet mostrarTexto(Archivo a, char ver){
         while(!isEmptyLi(l)){
             headLi(l);
             contaLi++;
-            cout<<contaLi<<"\t"<<headLi(l)<<endl<<endl;
+            cout<<contaLi<<"\t"<<headLi(l)<<endl;
             l=tailLiSig(l);
         }
+        cout<<endl;
         ret= OK;
     }
     else{
@@ -49,7 +55,7 @@ tipoRet mostrarTexto(Archivo a, char ver){
 }
 
 int main(){
-    Archivo a;
+    Archivo a=NULL;
     tipoRet ins, imp, delli, delarch;
     char nom[20], line[50];
     char * error;
@@ -62,7 +68,7 @@ int main(){
     cin>>opc;
     system("clear");
     while(opc!=0){
-        
+
         if(opc == 1){
             strcpy(nom,arch.c_str());
             a= crearArchivo(nom);
@@ -83,21 +89,26 @@ int main(){
             mostrarTexto(a, '1');
         }
         if(opc == 4){
-            if(!isEmptyArch(a)){
+           
                 cout<<"BORRAR LINEA\n\n";
                 cout<<"Nro de Linea: ";
                 cin>>nroli;
                 cout<<"\n";
-                delli= borrarLinea(a, '1', nroli, error);        
-                cout<<error<<endl;
+                delli= borrarLinea(a, '1', nroli, error); 
+                if(delli==OK)
+                {
+                    cout<<"Linea Borrada"<<endl;
+                }       
+                else
+                    cout<<error<<endl;
                 cout<<"\n";
-            }else{
-                cout<<"Archivo no contiene lineas"<<endl<<endl;
+           
+                
             }
   
         
             
-        }
+        
 
         if(opc == 5){
             delarch= borrarArchivo(a);
