@@ -289,11 +289,11 @@ void insertarAlMedio(Archivo &a, char ver, char line[50], unsigned int nroLinea,
                 {
                     borrarAlInicio(a, ver, nroLinea, error);
                 }
-                else if (nroLinea == nromaxli)
+                if (nroLinea == nromaxli)
                 {
                     borrarAlFinal(a, ver, nroLinea, error);
                 }
-                else if (nroLinea < nromaxli)
+                if (nroLinea < nromaxli)
                 {
                     borrarAlMedio(a, ver, nroLinea, error);
                 }
@@ -325,17 +325,9 @@ void insertarAlMedio(Archivo &a, char ver, char line[50], unsigned int nroLinea,
     tipoRet borrarArchivo(Archivo & a)
     {
         tipoRet ret;
-        if (!isEmptyArch(a))
-        {
-            if (a->primeraLinea == NULL)
-            {
-                delete a;
-                a = NULL;
-            }
-            else if (a->primeraLinea != NULL)
-            {
-                borrarArchivoAux(a);
-            }
+        if (isEmptyArch(a)){
+            delete a;
+            a=NULL;
         }
         ret = OK;
         return ret;
