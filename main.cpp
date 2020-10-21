@@ -42,7 +42,7 @@ tipoRet mostrarTexto(Archivo a, char ver){
         ret= OK;
     }
     else{
-        cout<<headArch(a)<<" - "<<ver<<endl<<endl;
+        cout<<headArch(a)<<endl<<endl;
         cout<<"No contiene lineas"<<endl<<endl;
     }
     
@@ -95,6 +95,7 @@ int main(){
             cout<<"Nro de Linea: ";
             cin>>nroli;
             cout<<"\n\n";
+            
             delli= borrarLinea(a, '1', nroli, 'k');
         }
 

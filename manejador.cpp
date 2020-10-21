@@ -62,7 +62,7 @@ bool isEmptyLi(Linea l)
 //Post: Delvuelve True si el archivo es Vacio.
 bool isEmptyArch(Archivo a)
 {
-    if ((a->primeraLinea == NULL) && (a->ultimaLinea == NULL))
+    if (a->primeraLinea == NULL && a->ultimaLinea == NULL)
         return true;
     else
     {
@@ -92,15 +92,10 @@ Linea tailLiSig(Linea l)
 }
 
 //Pre: Debe existir el Archivo con al menos una Linea Insertada
-//Post: Devuelve el primero del archivo
-Linea ObtenerPrimLi(Archivo a){
+//Post: Devuelve todos los elemenos menos el primero del archivo
+Linea ObtenerPrimLi(Archivo a)
+{
     return a->primeraLinea;
-}
-
-//Pre: Debe existir el Archivo con al menos una Linea Insertada
-//Post: Devuelve el ultimo del archivo
-Linea ObtenerUltiLi(Archivo a){
-    return a->ultimaLinea;
 }
 
 //Pre: Recibe un Archivo existente
@@ -127,19 +122,30 @@ int contarLineas(Archivo a)
 
 //Pre: Recibe un Archivo ya creado
 //Post: Inserta un elemento al inicio de una Linea
-void insertarAlInicio(Archivo &a, char ver, char line[50], unsigned int nroLinea, char error){
+void insertarAlInicio(Archivo &a, char ver, char line[50], unsigned int nroLinea, char error)
+{
     Linea l = crearLineas(line);
     l->siguiente = a->primeraLinea;
     l->anterior = NULL;
     a->primeraLinea = l;
-    if (a->ultimaLinea == NULL){
+    if (a->ultimaLinea == NULL)
+    {
         a->ultimaLinea = l;
     }
-
     if (!isEmptyLi(a->ultimaLinea->siguiente))
     {
         a->primeraLinea->siguiente->anterior = a->primeraLinea;
     }
+    /*     Linea l=crearLineas(line);
+    if(a->primeraLinea==NULL){
+        a->primeraLinea=l;
+        a->ultimaLinea=l;
+    }
+    else{
+        l->siguiente=a->primeraLinea;
+        a->primeraLinea->anterior=l;
+        a->primeraLinea=l;
+    } */
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -148,11 +154,20 @@ void insertarAlInicio(Archivo &a, char ver, char line[50], unsigned int nroLinea
 
 //Pre: Recibe un Archivo ya creado
 //Post: Inserta un elemento al final de una linea
-void insertarAlFinal(Archivo &a, char ver, char line[50], unsigned int nroLinea, char error){
-    Linea l = crearLineas(line);
-    l->anterior = a->ultimaLinea;
-    a->ultimaLinea->siguiente = l;
-    a->ultimaLinea = l;
+void insertarAlFinal(Archivo &a, char ver, char line[50], unsigned int nroLinea, char error)
+{
+
+    if (a->ultimaLinea != NULL)
+    {
+        Linea l = crearLineas(line);
+        l->anterior = a->ultimaLinea;
+        a->ultimaLinea->siguiente = l;
+        a->ultimaLinea = l;
+    }
+    else
+    {
+        insertarAlInicio(a, ver, line, nroLinea, error);
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -161,7 +176,8 @@ void insertarAlFinal(Archivo &a, char ver, char line[50], unsigned int nroLinea,
 
 //Pre: Recibe un Archivo ya creado
 //Post: Inserta un elemento al final de una linea
-void insertarAlMedio(Archivo &a, char ver, char line[50], unsigned int nroLinea, char error){
+void insertarAlMedio(Archivo &a, char ver, char line[50], unsigned int nroLinea, char error)
+{
     int nromaxli = contarLineas(a);
     Linea l = crearLineas(line);
     if (nroLinea == 1) {
@@ -181,7 +197,8 @@ void insertarAlMedio(Archivo &a, char ver, char line[50], unsigned int nroLinea,
                     int cont = 1;
                     Linea laux = a->primeraLinea;
                     Linea laux1;
-                    while (cont < nroLinea){
+                    while (cont < nroLinea)
+                    {
                         laux1 = laux;
                         laux = laux->siguiente;
                         cont++;
@@ -204,13 +221,23 @@ void insertarAlMedio(Archivo &a, char ver, char line[50], unsigned int nroLinea,
     tipoRet insertarLinea(Archivo & a, char ver, char line[50], unsigned int nroLinea, char error)
     {
         tipoRet ret;
-            if (!isEmptyArch(a)){
+        if (a != NULL)
+        {
+            if (a->primeraLinea == NULL)
+            {
                 insertarAlInicio(a, ver, line, nroLinea, error);
             }
-            else{
+            else
+            {
                 insertarAlMedio(a, ver, line, nroLinea, error);
             }
-            
+            ret = OK;
+        }
+        else
+        {
+            ret = ERROR;
+        }
+
         return ret;
     }
     //Pre: Recibe un archivo no Vacio
@@ -248,13 +275,14 @@ void insertarAlMedio(Archivo &a, char ver, char line[50], unsigned int nroLinea,
         delete l;
     }
 
-    //Pre:Recibe Numero de linea y un archivo1
+    //Pre:Recibe Numero de linea y un archivo
     //Post:Devuelve Lineas con el elemento eliminado
     tipoRet borrarLinea(Archivo & a, char ver, int nroLinea, char error)
     {
         tipoRet ret;
         int nromaxli = contarLineas(a);
-        if (!isEmptyArch(a)){
+        if (a != NULL)
+        {
             if (a->primeraLinea != NULL && a->ultimaLinea != NULL)
             {
                 if (nroLinea == 1)
@@ -272,7 +300,6 @@ void insertarAlMedio(Archivo &a, char ver, char line[50], unsigned int nroLinea,
             }
             ret = OK;
             return ret;
-
         }
         else
         {
@@ -281,14 +308,34 @@ void insertarAlMedio(Archivo &a, char ver, char line[50], unsigned int nroLinea,
         }
     }
 
+    void borrarArchivoAux(Archivo a)
+    {
+        int nromaxli = contarLineas(a);
+        int cont = 1;
+        Linea l = a->primeraLinea;
+        while (cont < nromaxli)
+        {
+            l = l->siguiente;
+            cont++;
+        }
+    }
 
     //Pre:Recibe un archivo
     //Post:Devuleve un archivo Vacio.
-    tipoRet borrarArchivo(Archivo & a){
+    tipoRet borrarArchivo(Archivo & a)
+    {
         tipoRet ret;
-        if (isEmptyArch(a)){
-            delete a;
-            a=NULL;
+        if (!isEmptyArch(a))
+        {
+            if (a->primeraLinea == NULL)
+            {
+                delete a;
+                a = NULL;
+            }
+            else if (a->primeraLinea != NULL)
+            {
+                borrarArchivoAux(a);
+            }
         }
         ret = OK;
         return ret;

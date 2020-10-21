@@ -1,13 +1,11 @@
 #ifndef MANEJADOR_H
 #define MANEJADOR_H
 
-
-enum _retorno{
-    OK, ERROR, NO_IMPLEMENTADA
+enum retorno{
+OK, ERROR, NO_IMPLEMENTADA
 };
 
-
-typedef enum _retorno tipoRet;
+typedef enum retorno tipoRet;
 typedef struct str_Archivo * Archivo;
 typedef struct str_Lineas * Linea;
 //Pre:n/a
