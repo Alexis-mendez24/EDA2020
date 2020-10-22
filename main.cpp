@@ -32,24 +32,31 @@ void menu(){
 
 tipoRet mostrarTexto(Archivo a, char ver){
     tipoRet ret;
-    Linea l = ObtenerPrimLi(a); //Obtiene la primer linea del archivo
-    int contaLi=0;
-
-    if(!isEmptyArch(a)){
-        cout<<headArch(a)<<endl<<endl;
-        while(!isEmptyLi(l)){
-            headLi(l);
-            contaLi++;
-            cout<<contaLi<<"\t"<<headLi(l)<<endl;
-            l=tailLiSig(l);
+    if(a!=NULL){
+        
+        Linea l = ObtenerPrimLi(a); //Obtiene la primer linea del archivo
+        int contaLi=0;
+        if(!isEmptyArch(a)){
+            cout<<headArch(a)<<endl<<endl;
+            while(!isEmptyLi(l)){
+                headLi(l);
+                contaLi++;
+                cout<<contaLi<<"\t"<<headLi(l)<<endl;
+                l=tailLiSig(l);
+            }
+            cout<<endl;
+            ret= OK;
         }
-        cout<<endl;
-        ret= OK;
+        else{
+            cout<<headArch(a)<<endl<<endl;
+            cout<<"No contiene lineas"<<endl<<endl;
+        }
     }
-    else{
-        cout<<headArch(a)<<endl<<endl;
-        cout<<"No contiene lineas"<<endl<<endl;
+    else
+    {
+        cout<<"ERROR NO Existe archivo"<<endl<<endl;
     }
+    
     
     return ret;
 }

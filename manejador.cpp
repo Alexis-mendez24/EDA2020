@@ -165,7 +165,10 @@ void insertarAlMedio(Archivo &a, char ver, char line[50], unsigned int nroLinea)
 {
     int nromaxli = contarLineas(a);
     Linea l = crearLineas(line);
-    
+    if (nroLinea == 1) {
+        insertarAlInicio(a, ver, line);
+    }
+    else{
         if (nromaxli < nroLinea){
             insertarAlFinal(a, ver, line, nroLinea);
         }else{
@@ -175,25 +178,24 @@ void insertarAlMedio(Archivo &a, char ver, char line[50], unsigned int nroLinea)
                 a->ultimaLinea->anterior = l;
             }
             else{
-                
+                if (nromaxli > nroLinea){
                     int cont = 1;
                     Linea laux = a->primeraLinea;
-                   
+                    Linea laux1;
                     while (cont < nroLinea)
                     {
-                        
+                        laux1 = laux;
                         laux = laux->siguiente;
                         cont++;
                     }
-
-                    l->anterior = laux->anterior;
+                    l->anterior = laux1;
                     l->siguiente = laux;
-                    laux->anterior->siguiente = l;
+                    laux1->anterior = l;
                     laux->anterior = l;
-                
+                }
             }
         }
-    
+    }
 }
 
     //Pre: Recibe un Archivo creado
@@ -201,7 +203,7 @@ void insertarAlMedio(Archivo &a, char ver, char line[50], unsigned int nroLinea)
     tipoRet insertarLinea(Archivo & a, char ver, char line[50], unsigned int nroLinea, char *error)
     {
         tipoRet ret;
-        if (isEmptyArch(a)|| nroLinea==1)
+        if (isEmptyArch(a))
         {   
             if(nroLinea==1)
             {
