@@ -19,7 +19,6 @@ struct str_Lineas
     struct str_Lineas *siguiente;
 };
 
-
 //Pre: n/a.
 //Post: Crea un Archivo vacio.
 Archivo crearArchivo(char nom[20])
