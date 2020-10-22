@@ -54,7 +54,7 @@ tipoRet mostrarTexto(Archivo a, char ver){
     }
     else
     {
-        cout<<"ERROR NO Existe archivo"<<endl<<endl;
+        cout<<"ERROR: Existe archivo"<<endl<<endl;
     }
     
     
@@ -73,7 +73,7 @@ int main(){
 
     menu();    
     cin>>opc;
-    system("clear");
+    limpiar_pantalla();
     while(opc!=0){
 
         if(opc == 1){
@@ -89,7 +89,16 @@ int main(){
             getline(cin, lin);
             getline(cin, lin);
             strcpy(line,lin.c_str());
+            cout<<endl<<endl;
             ins=insertarLinea(a, '1', line, nroli, error);
+            if(ins == OK){
+                cout<<error<<endl;
+
+            }
+            else{
+                cout<<error<<endl;
+
+            }
             
         }
         if(opc == 3){
@@ -100,29 +109,24 @@ int main(){
                 cout<<"BORRAR LINEA\n\n";
                 cout<<"Nro de Linea: ";
                 cin>>nroli;
-                cout<<"\n";
+                cout<<endl<<endl;
                 delli= borrarLinea(a, '1', nroli, error); 
                 if(delli==OK)
                 {
-                    cout<<"Linea Borrada"<<endl;
+                    cout<<error<<endl;
                 }       
                 else
                     cout<<error<<endl;
-                cout<<"\n";
            
                 
             }
   
-        
-            
-        
-
         if(opc == 5){
             delarch= borrarArchivo(a);
         }
         menu();    
         cin>>opc;
-        system("clear");    
+        limpiar_pantalla();   
     }
     return 0;
 }

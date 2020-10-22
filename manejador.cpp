@@ -64,6 +64,12 @@ bool isEmptyArch(Archivo a)
     }
 }
 
+//Pre: n/a.
+//Post: Verifica si el archivo fue creado o si existe
+bool existArch(Archivo a){
+    return a!=NULL;
+}
+
 //Pre: Debe existir Archivo y al menos un valor en la Linea.
 //Post: Devuelve el contenido o el valor *Char de una Linea.
 char *headLi(Linea l)
@@ -126,18 +132,6 @@ void insertarAlInicio(Archivo &a, char ver, char line[50])
     {
         a->primeraLinea->siguiente->anterior = a->primeraLinea;
     }
-
-
-    /*     Linea l=crearLineas(line);
-    if(a->primeraLinea==NULL){
-        a->primeraLinea=l;
-        a->ultimaLinea=l;
-    }
-    else{
-        l->siguiente=a->primeraLinea;
-        a->primeraLinea->anterior=l;
-        a->primeraLinea=l;
-    } */
 }
 
 
@@ -174,7 +168,8 @@ void insertarAlMedio(Archivo &a, char ver, char line[50], unsigned int nroLinea)
         }else{
             if (nromaxli == nroLinea){
                 l->siguiente = a->ultimaLinea;
-                l->anterior = a->ultimaLinea->anterior;
+                l->anterior = a->ultimaLinea->anterior;                
+                a->ultimaLinea->anterior->siguiente=l;
                 a->ultimaLinea->anterior = l;
             }
             else{
@@ -200,34 +195,30 @@ void insertarAlMedio(Archivo &a, char ver, char line[50], unsigned int nroLinea)
 
     //Pre: Recibe un Archivo creado
     //Post: Devuelve OK si inserta correcto
-    tipoRet insertarLinea(Archivo & a, char ver, char line[50], unsigned int nroLinea, char *error)
+    tipoRet insertarLinea(Archivo & a, char ver, char line[50], unsigned int nroLinea, char *&error)
     {
-        tipoRet ret;
-        if (isEmptyArch(a))
-        {   
-            if(nroLinea==1)
+        tipoRet  ret;
+        if (existArch(a))
+        {
+            if (a->primeraLinea == NULL)
             {
                 insertarAlInicio(a, ver, line);
-                ret = OK;
             }
-            else{
-                ret=ERROR;
-            }
-           
-        }
-        else
-        {   
-            int nromaxli = contarLineas(a);
-            if(nroLinea<=(nromaxli+1))
+            else
             {
                 insertarAlMedio(a, ver, line, nroLinea);
-                ret = OK;
             }
-            else{
-                ret=ERROR;
-            }
+            ret = OK;
+            error=new char[strlen("OK: Se inserta correctamente")+1];
+            strcpy(error,"OK: Se inserta correctamente");
         }
-        
+        else
+        {
+            ret = ERROR;
+            error=new char[strlen("ERROR: Archivo no existe")+1];
+            strcpy(error,"ERROR: Archivo no existe");
+        }
+
         return ret;
     }
     //Pre: Recibe un archivo no Vacio
@@ -281,61 +272,57 @@ void insertarAlMedio(Archivo &a, char ver, char line[50], unsigned int nroLinea)
     {
         tipoRet  ret = OK;
         error=new char[1];
-        strcpy(error,"");;
+        strcpy(error,"");
        
-        if (a!=NULL)
+        if (existArch(a))
         {
             if (!isEmptyArch(a))
             {
-                 int nromaxli = contarLineas(a);
+                int nromaxli = contarLineas(a);
                 if (nroLinea == 1)
                 {
                     borrarAlInicio(a, ver, nroLinea);
+                        ret=OK;
+                        error=new char[strlen("OK: Linea Borrada")+1];
+                        strcpy(error,"OK: Linea Borrada");
                 }else{
                     if (nroLinea == nromaxli)
                     {
                         borrarAlFinal(a, ver, nroLinea);
+                        ret=OK;
+                        error=new char[strlen("OK: Linea Borrada")+1];
+                        strcpy(error,"OK: Linea Borrada");
+
                     }else{
                         if (nroLinea < nromaxli )
                         {
                             borrarAlMedio(a, ver, nroLinea);
+                            ret=OK;
+                            error=new char[strlen("OK: Linea Borrada")+1];
+                            strcpy(error,"OK: Linea Borrada");
                            
                         }
                         else{
                             ret=ERROR;
-                            error=new char[strlen("Numero de Linea Invalido")+1];
-                            strcpy(error,"Numero de Linea Invalido");
+                            error=new char[strlen("ERROR: Numero de Linea Invalido")+1];
+                            strcpy(error,"ERROR: Numero de Linea Invalido");
                         }
                     }
                 }
             }
             else{
                  ret=ERROR;
-                 error=new char[strlen("Error, archivo vacio")+1];
-                 strcpy(error,"Error, archivo vacio");
+                 error=new char[strlen("ERROR: Archivo vacio")+1];
+                 strcpy(error,"ERROR: Archivo vacio");
             }
-            
         }
         else
         {
             ret = ERROR;
-            error=new char[strlen("Archivo no existe")+1];
-            strcpy(error,"Archivo no existe");
-            
+            error=new char[strlen("ERROR: Archivo no existe")+1];
+            strcpy(error,"ERROR: Archivo no existe");  
         }
         return ret;
-    }
-
-    void borrarArchivoAux(Archivo a)
-    {
-        int nromaxli = contarLineas(a);
-        int cont = 1;
-        Linea l = a->primeraLinea;
-        while (cont < nromaxli)
-        {
-            l = l->siguiente;
-            cont++;
-        }
     }
 
     //Pre:Recibe un archivo
