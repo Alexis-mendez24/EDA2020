@@ -30,7 +30,7 @@ void menu(){
     cout<<"Inserte Opcion:";
 }
 
-tipoRet mostrarTexto(Archivo a, char ver){
+tipoRet mostrarTexto(Archivo a){
     tipoRet ret;
     if(a!=NULL){
         
@@ -90,7 +90,7 @@ int main(){
             getline(cin, lin);
             strcpy(line,lin.c_str());
             cout<<endl<<endl;
-            ins=insertarLinea(a, '1', line, nroli, error);
+            ins=insertarLinea(a, line, nroli, error);
             if(ins == OK){
                 cout<<error<<endl;
 
@@ -102,7 +102,7 @@ int main(){
             
         }
         if(opc == 3){
-            mostrarTexto(a, '1');
+            mostrarTexto(a);
         }
         if(opc == 4){
            
@@ -110,7 +110,7 @@ int main(){
                 cout<<"Nro de Linea: ";
                 cin>>nroli;
                 cout<<endl<<endl;
-                delli= borrarLinea(a, '1', nroli, error); 
+                delli= borrarLinea(a, nroli, error); 
                 if(delli==OK)
                 {
                     cout<<error<<endl;

@@ -54,17 +54,17 @@ Archivo crearArchivo(char nom[10]);
 
 //Pre: Recibe un Archivo creado
 //Post: Devuelve OK si inserta correcto de lo contrario ERROR
-tipoRet insertarLinea(Archivo &a, char ver, char line[50],unsigned int nroLinea, char *&error);
+tipoRet insertarLinea(Archivo &a, char * linea,unsigned int nroLinea, char *&error);
 
 //Pre:Recibe un archivo no vacio
 //Post:Devuelve el contenido del archivo con sus lineas
-tipoRet mostrarTexto(Archivo a, char ver);
+tipoRet mostrarTexto(Archivo a);
 
 //Destructoras
 
 //Pre:Recibe Numero de linea y un archivo
 //Post:Devuelve Lineas con el elemento eliminado
-tipoRet borrarLinea(Archivo &a, char ver, unsigned int  nroLinea, char *&error);
+tipoRet borrarLinea(Archivo &a, unsigned int  nroLinea, char *&error);
 
 //Pre:Recibe un archivo
 //Post:Devuleve un archivo Vacio.
