@@ -159,33 +159,25 @@ void insertarAlMedio(Archivo &a, char * linea, unsigned int nroLinea)
     if (nroLinea == 1) {
         insertarAlInicio(a, linea);
     }
-    else{    
-        if (nromaxli < nroLinea){
-            insertarAlFinal(a, linea, nroLinea);
-        }else{
-            if (nromaxli == nroLinea){
-                l->siguiente = a->ultimaLinea;
-                l->anterior = a->ultimaLinea->anterior;
-                a->ultimaLinea->anterior = l;
-            }
-            else{
+    else{ 
+        if (nromaxli == nroLinea){
+            l->siguiente = a->ultimaLinea;
+            l->anterior = a->ultimaLinea->anterior;                
+            a->ultimaLinea->anterior->siguiente=l;
+            a->ultimaLinea->anterior = l;
+        }
+        else{
+            int cont = 1;
+            Linea laux = a->primeraLinea;
                 
-                    int cont = 1;
-                    Linea laux = a->primeraLinea;
-                   
-                    while (cont < nroLinea)
-                    {
-                        
-                        laux = laux->siguiente;
-                        cont++;
-                    }
-
-                    l->anterior = laux->anterior;
-                    l->siguiente = laux;
-                    laux->anterior->siguiente = l;
-                    laux->anterior = l;
-                
+            while (cont < nroLinea){        
+                laux = laux->siguiente;
+                cont++;
             }
+            l->anterior = laux->anterior;
+            l->siguiente = laux;
+            laux->anterior->siguiente = l;
+            laux->anterior = l;
         }
     }
 }
@@ -195,15 +187,20 @@ void insertarAlMedio(Archivo &a, char * linea, unsigned int nroLinea)
     tipoRet insertarLinea(Archivo & a, char * linea, unsigned int nroLinea, char *&error)
     {
         tipoRet  ret;
+        int nromaxli = contarLineas(a);
         if (existArch(a))
         {
             if (a->primeraLinea == NULL)
             {
                 insertarAlInicio(a, linea);
             }
-            else
-            {
+            else{   
+                if (nromaxli < nroLinea){
+                insertarAlFinal(a, linea, nroLinea);
+                }
+                else{
                 insertarAlMedio(a, linea, nroLinea);
+                }
             }
             ret = OK;
             error=new char[strlen("OK: Se inserta correctamente")+1];
