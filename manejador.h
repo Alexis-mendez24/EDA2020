@@ -18,6 +18,10 @@ typedef struct str_Lineas *Linea;
 //Post: Verifica si el archivo fue creado o si existe
 bool fileExists(Archivo a);
 
+//Pre:Recibe un archivo
+//Post:Cambia el nombre de la posicion actual
+void cambiarNombreArchivo(Archivo a,char * nom);
+
 //Pre: Debe existir el Archivo y Lineas.
 //Post: Delvuelve True si las linea son Vacias.
 bool isEmptyLi(Linea l);

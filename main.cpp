@@ -5,7 +5,7 @@
 #include <string.h>
 using namespace std;
 
-void limpiar_pantalla()
+void limpiar_Pantalla()
 {
 #ifdef _WIN32
     system("cls");
@@ -14,7 +14,7 @@ void limpiar_pantalla()
 #endif
 }
 
-void menu()
+void menuPrincipal()
 {
     cout << " ___________________________ " << endl;
     cout << "|                           |" << endl;
@@ -32,15 +32,25 @@ void menu()
     cout << "Inserte Opcion:";
 }
 
+void subMenu(){
+    cout << "El archivo Existe" << endl
+        << endl;
+    cout << "1 - Cambiar Nombre del archivo" << endl;
+    cout << "2 - Remplazar archivo por uno nuevo Vacio" << endl;
+    cout << "0 - Volver" << endl;
+    cout << "Inserte Opcion: ";
+}
+
 tipoRet mostrarTexto(Archivo a)
 {
     tipoRet ret;
     if (fileExists(a))
     {
-        Linea l = ObtenerPrimLi(a); //Obtiene la primer linea del archivo
+        Linea l = ObtenerPrimLi(a);
         int contaLi = 0;
         if (!isEmptyArch(a))
-        {
+        {   
+            cout << "----------------------------------------------------" << endl;
             cout << headArch(a) << endl
                  << endl;
             while (!isEmptyLi(l))
@@ -50,15 +60,17 @@ tipoRet mostrarTexto(Archivo a)
                 cout << contaLi << "\t" << headLi(l) << endl;
                 l = tailLiSig(l);
             }
-            cout << endl;
+            cout << "----------------------------------------------------" << endl;
             ret = OK;
         }
         else
-        {
+        {   
+            cout << "----------------------------------------------------" << endl;
             cout << headArch(a) << endl
                  << endl;
             cout << "No contiene lineas" << endl
                  << endl;
+            cout << "----------------------------------------------------" << endl;
             ret = OK;
         }
     }
@@ -81,23 +93,60 @@ int main()
     string arch;
     string lin;
 
-    menu();
+    menuPrincipal();
     cin >> opc;
-    limpiar_pantalla();
+    limpiar_Pantalla();
     while (opc != 0)
     {
         if (opc == 1)
         {
             cout << "INSERTAR ARCHIVO" << endl
                  << endl;
-            cout << "Ingrese nombre del archivo: ";
-            getline(cin, arch);
-            getline(cin, arch);
-            strcpy(nom, arch.c_str());
-            a = crearArchivo(nom);
-            cout << "Archivo creado." << endl
-                 << endl;
-            mostrarTexto(a);
+            if (!fileExists(a))
+            {
+                cout << "Ingrese nombre del archivo: ";
+                getline(cin, arch);
+                getline(cin, arch);
+                strcpy(nom, arch.c_str());
+                a = crearArchivo(nom);
+                cout << "Archivo creado." << endl
+                     << endl;
+                mostrarTexto(a);
+            }
+            else
+            {
+                subMenu();
+                cin >> opc;
+                if (opc == 1)
+                {
+                    cout << "CAMBIAR NOMBRE DEL ARCHIVO" << endl
+                         << endl;
+                    getline(cin, arch);
+                    getline(cin, arch);
+                    strcpy(nom, arch.c_str());
+                    cambiarNombreArchivo(a, nom);
+                }
+                if (opc == 2)
+                {
+                    ret = borrarArchivo(a);
+                    cout << "OK" << endl;
+                    cout << "Ingrese nombre del archivo: ";
+                    getline(cin, arch);
+                    getline(cin, arch);
+                    strcpy(nom, arch.c_str());
+                    a = crearArchivo(nom);
+                    cout << "Archivo creado." << endl
+                         << endl;
+                    mostrarTexto(a);
+                    menuPrincipal();
+                    cin >> opc;
+                    limpiar_Pantalla();
+                }
+                if (opc == 0)
+                {
+                    limpiar_Pantalla();
+                }
+            }
         }
         if (opc == 2)
         {
@@ -153,9 +202,9 @@ int main()
                 cout << "ERROR: Archivo Inexistente" << endl;
             }
         }
-        menu();
+        menuPrincipal();
         cin >> opc;
-        limpiar_pantalla();
+        limpiar_Pantalla();
     }
     return 0;
 }

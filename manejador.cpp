@@ -1,9 +1,7 @@
 #include <stdlib.h>
-#include <iostream>
 #include "manejador.h"
 #include <ctype.h>
 #include <string.h>
-using namespace std;
 
 struct str_Archivo
 {
@@ -28,6 +26,11 @@ Archivo crearArchivo(char *nom)
     aux->primeraLinea = NULL;
     aux->ultimaLinea = NULL;
     return aux;
+}
+//Pre:Recibe un archivo
+//Post:Cambia el nombre de la posicion actual
+void cambiarNombreArchivo(Archivo a,char * nom){
+    a->nombre = nom;
 }
 
 //Pre: Debe existir Archivo.
@@ -227,6 +230,7 @@ tipoRet insertarLinea(Archivo &a, char *linea, unsigned int nroLinea, char *erro
     }
     return ret;
 }
+
 //Pre: Recibe un archivo no Vacio
 //Post:Elimina primer linea
 void borrarAlInicio(Archivo &a, int nroLinea)
@@ -263,6 +267,7 @@ void borrarAlFinal(Archivo &a, int nroLinea)
         a->ultimaLinea->siguiente = NULL;
     }
 }
+
 //Pre: Recibe un archivo no Vacio
 //Post: Busca y elimina una linea definida por el usuario
 void borrarAlMedio(Archivo &a, int nroLinea)
